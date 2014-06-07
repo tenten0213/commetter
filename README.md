@@ -1,6 +1,8 @@
 # commetter
 
-FIXME
+sample web application.
+
+using [Luminus - A Clojure Web Framework](http://www.luminusweb.net/)
 
 ## Prerequisites
 
@@ -14,6 +16,5 @@ To start a web server for the application, run:
 
     lein ring server
 
-## License
-
-Copyright © 2014 FIXME
+## Demo
+http://commetter.herokuapp.com/
