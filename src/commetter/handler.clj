@@ -7,12 +7,14 @@
             [taoensso.timbre :as timbre]
             [taoensso.timbre.appenders.rotor :as rotor]
             [selmer.parser :as parser]
-            [environ.core :refer [env]]))
+            [environ.core :refer [env]]
+            [commetter.db.schema :as schema]))
 
 (defroutes app-routes
   (route/resources "/")
   (route/not-found "Not Found"))
 
+;; init書き換えたらring server 再起動が必要
 (defn init
   "init will be called once when
    app is deployed as a servlet on
@@ -32,6 +34,10 @@
     {:path "commetter.log" :max-size (* 512 1024) :backlog 10})
 
   (if (env :dev) (parser/cache-off!))
+
+  ;; initialize the database if needed
+  (if-not (schema/initialized?) (schema/create-tables))
+
   (timbre/info "commetter started successfully"))
 
 (defn destroy
@@ -39,8 +45,6 @@
    shuts down, put any clean up code here"
   []
   (timbre/info "commetter is shutting down..."))
-
-
 
 (def app (app-handler
            ;; add your application routes here

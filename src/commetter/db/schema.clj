@@ -17,22 +17,31 @@
   []
   (.exists (new java.io.File (str (io/resource-path) db-store ".h2.db"))))
 
-(defn create-users-table
+(defn create-comments-table
   []
   (sql/db-do-commands
     db-spec
     (sql/create-table-ddl
-      :users
-      [:id "varchar(20) PRIMARY KEY"]
-      [:first_name "varchar(30)"]
-      [:last_name "varchar(30)"]
-      [:email "varchar(30)"]
-      [:admin :boolean]
-      [:last_login :time]
-      [:is_active :boolean]
-      [:pass "varchar(100)"])))
+      :comments
+      [:id "varchar(20) PRIMARY KEY AUTO_INCREMENT"]
+      [:name "varchar(30)"]
+      [:comment "varchar(200)"]
+      [:timestamp :timestamp]))
+   (sql/db-do-prepared db-spec
+     "CREATE INDEX timestamp_insdex ON comments (timestamp)"))
+
+(defn drop-comments-table
+  []
+  (sql/db-do-commands
+    db-spec
+    (sql/drop-table-ddl
+      :comments)))
 
 (defn create-tables
   "creates the database tables used by the application"
   []
-  (create-users-table))
+  (create-comments-table))
+
+(defn drop-tables
+  []
+  (drop-comments-table))

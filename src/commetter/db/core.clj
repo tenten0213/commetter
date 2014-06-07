@@ -5,20 +5,21 @@
 
 (defdb db schema/db-spec)
 
-(defentity users)
+(defentity comments)
 
-(defn create-user [user]
-  (insert users
-          (values user)))
+(defn save-comment [name comment]
+  (insert comments
+          (values
+           {:name name
+            :comment comment
+            :timestamp (new java.util.Date)})))
 
-(defn update-user [id first-name last-name email]
-  (update users
-  (set-fields {:first_name first-name
-               :last_name last-name
-               :email email})
-  (where {:id id})))
+;(defn update-user [id first-name last-name email]
+;  (update users
+;  (set-fields {:first_name first-name
+;               :last_name last-name
+;               :email email})
+;  (where {:id id})))
 
-(defn get-user [id]
-  (first (select users
-                 (where {:id id})
-                 (limit 1))))
+(defn get-comments []
+  (select comments))
